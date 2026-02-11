@@ -610,11 +610,25 @@
         function handlePrint() { window.print(); }
         window.onload = () => { setLanguage('uz'); updateClock(); };
 
-        // Mualliflik huquqini himoya qilish (Domain protection)
+        // Mualliflik huquqini himoya qilish va Amal qilish muddati
         (function() {
             var allowedDomain = 'jac-calculator.uz';
+            var expiryDate = new Date('2024-06-01'); // Amal qilish muddati
+
+            // 1. Domen himoyasi
             if (window.location.hostname !== allowedDomain && window.location.hostname !== 'www.' + allowedDomain) {
                 console.error("Mualliflik huquqi buzildi!");
+                
+                // 2. Muddat tugashini tekshirish (faqat ruxsat etilmagan domenda ishlaydi)
+                if (new Date() > expiryDate) {
+                    alert("Dastur muddati tugadi. Yangilash uchun jac-calculator.uz saytiga kiring.");
+                    document.addEventListener("DOMContentLoaded", function() {
+                        document.body.innerHTML = ""; 
+                    });
+                    return; // Keyingi qismga o'tmaslik uchun
+                }
+
+                // Domen noto'g'ri bo'lsa, lekin muddat tugamagan bo'lsa ogohlantirish oynasi
                 document.addEventListener("DOMContentLoaded", function() {
                     document.body.innerHTML = `
                         <div style="text-align:center; margin-top:100px; font-family:sans-serif; background: white; height: 100vh;">
